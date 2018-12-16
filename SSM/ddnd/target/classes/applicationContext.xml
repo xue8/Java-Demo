@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="cn.ddnd.www"></context:component-scan>
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/spring?serverTimezone=GMT%2B8"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="root"></property>
+    </bean>
+
+    <!--配置Mybatis的SqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入连接池数据源配置-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--注入mybatis配置信息-->
+        <property name="configLocation" value="classpath:Mybatis-config.xml"></property>
+        <!--mapper.xml和mapper.java不在同一个目录 则配置此参数-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+
+    <!--配置Mybatis的Mapper映射器-->
+    <!--<bean id="userBean" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+        <!--&lt;!&ndash;SqlSessionFactory是用来指定生成实现SqlSession接口的SqlSessionTemplate对象的&ndash;&gt;-->
+        <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>-->
+        <!--&lt;!&ndash;mapperInterface指定我们Mapper对应的接口&ndash;&gt;-->
+        <!--<property name="mapperInterface" value="cn.ddnd.www.Dao.UserDaoao"></property>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;扫描Mapper接口并注册为Bean&ndash;&gt;-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.ddnd.www.Dao" />
+    </bean>
+
+</beans>
